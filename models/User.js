@@ -55,3 +55,14 @@ export const findUserWithUsername = ({username}) => {
     }
   });
 };
+export const findUserWithId = ({id}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log(id)
+      const user = await User.findOne({_id:id})
+      resolve(user);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
