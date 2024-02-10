@@ -35,8 +35,7 @@ export const registerUser = ({
     }
   });
 };
-
-export const findUserWithEmail = (email) => {
+export const findUserWithEmail = ({email}) => {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await User.findOne({ email });
@@ -46,7 +45,7 @@ export const findUserWithEmail = (email) => {
     }
   });
 };
-export const findUserWithUsername = (username) => {
+export const findUserWithUsername = ({username}) => {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await User.findOne({ username });

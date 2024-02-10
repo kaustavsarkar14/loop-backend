@@ -1,6 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { registerUser } from "../models/User.js";
+import {
+  findUserWithEmail,
+  findUserWithUsername,
+  registerUser,
+} from "../models/User.js";
 
 // REGISTER USER
 export const register = async (req, res) => {
@@ -10,21 +14,21 @@ export const register = async (req, res) => {
       lastName,
       email,
       password,
-      username, 
+      username,
       location,
       occupation,
     } = req.body;
-    const picturePath = req.file.filename
+    const picturePath = req.file.filename;
     const passwordHash = await bcrypt.hash(password, Number(process.env.SALT));
     const userDoc = await registerUser({
       firstName,
       lastName,
       email,
-      username, 
+      username,
       password: passwordHash,
       picturePath,
       location,
-      occupation, 
+      occupation,
     });
     return res.status(201).json(userDoc);
   } catch (error) {
@@ -35,6 +39,17 @@ export const register = async (req, res) => {
 // LOG IN
 export const login = async (req, res) => {
   try {
-    // const {email, password}
-  } catch (error) {}
+    const { loginId, password } = req.body;
+    let user;
+    user = await findUserWithEmail({ email: loginId });
+    user = await findUserWithUsername({ username: loginId });
+    if (!user) return res.status(400).json({ error: "Invalid credentials" });
+    const isMatched = await bcrypt.compare(password, user.password);
+    if (!isMatched) return res.status(400).json({ error: "Wrong password" });
+    const token = jwt.sign({id:user._id}, process.env.SECRET_KEY)
+    delete user.password
+    return res.status(200).json({ token, user });
+  } catch (error) {
+    return res.status(500).json({error})
+  } 
 };
