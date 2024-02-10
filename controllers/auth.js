@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import { registerUser } from "../models/User.js";
 
 // REGISTER USER
 export const register = async (req, res) => {
@@ -10,24 +10,31 @@ export const register = async (req, res) => {
       lastName,
       email,
       password,
-      picturePath,
+      username, 
       location,
       occupation,
     } = req.body;
+    const picturePath = req.file.filename
     const passwordHash = await bcrypt.hash(password, Number(process.env.SALT));
-    const newUser = new User({
+    const userDoc = await registerUser({
       firstName,
       lastName,
       email,
+      username, 
       password: passwordHash,
       picturePath,
       location,
-      occupation,
+      occupation, 
     });
-    const userDoc = await newUser.save();
     return res.status(201).json(userDoc);
   } catch (error) {
-    console.log(error)
     return res.status(500).json({ error: error.message });
   }
+};
+
+// LOG IN
+export const login = async (req, res) => {
+  try {
+    // const {email, password}
+  } catch (error) {}
 };
