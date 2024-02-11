@@ -10,7 +10,9 @@ import { fileURLToPath } from "url";
 import helmet from "helmet";
 import { register } from "./controllers/auth.js";
 import authRouter from "./routes/auth.js";
-import userRoute from "./routes/user.js";
+import userRouter from "./routes/user.js";
+import followRouter from "./routes/follow.js";
+import { isAuth } from "./middleware/auth.js";
 
 // CONFIGURATION
 const __filename = fileURLToPath(import.meta.url);
@@ -44,7 +46,8 @@ app.post('/auth/register', upload.single("picture"), register)
  
 // ROUTES
 app.use('/auth', authRouter)
-app.use('/user', userRoute)
+app.use('/user', userRouter)
+app.use('/follow',isAuth,  followRouter)
 
 // MONGOOSE SETUP
 const PORT = process.env.PORT || 8001;

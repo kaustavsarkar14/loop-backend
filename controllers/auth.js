@@ -18,7 +18,7 @@ export const register = async (req, res) => {
       location,
       occupation,
     } = req.body;
-    const picturePath = req.file.filename;
+    const picturePath = req?.file?.filename || "";
     const passwordHash = await bcrypt.hash(password, Number(process.env.SALT));
     const userDoc = await registerUser({
       firstName,
