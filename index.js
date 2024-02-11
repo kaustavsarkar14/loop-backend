@@ -13,6 +13,7 @@ import authRouter from "./routes/auth.js";
 import userRouter from "./routes/user.js";
 import followRouter from "./routes/follow.js";
 import { isAuth } from "./middleware/auth.js";
+import postRouter from "./routes/post.js";
 
 // CONFIGURATION
 const __filename = fileURLToPath(import.meta.url);
@@ -41,13 +42,17 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ROUTES WITH FILES 
-app.post('/auth/register', upload.single("picture"), register)
- 
+// ROUTES WITH FILES
+app.post("/uploadfile", upload.single("picture"), (req, res) => {
+  const filename = req.file.filename;
+  return res.status(201).json({ filename });
+});
+
 // ROUTES
-app.use('/auth', authRouter)
-app.use('/user', userRouter)
-app.use('/follow',isAuth,  followRouter)
+app.use("/auth", authRouter);
+app.use("/user", userRouter);
+app.use("/follow", isAuth, followRouter);
+app.use("/post", isAuth, postRouter);
 
 // MONGOOSE SETUP
 const PORT = process.env.PORT || 8001;
@@ -56,4 +61,5 @@ mongoose
   .then(() => console.log("connected to mongoDB"))
   .then(() =>
     app.listen(PORT, () => console.log(`server is running on port ${PORT}`))
-  ).catch((err)=>console.log(err))
+  )
+  .catch((err) => console.log(err));

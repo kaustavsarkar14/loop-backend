@@ -16,9 +16,9 @@ export const register = async (req, res) => {
       password,
       username,
       location,
+      picturePath, 
       occupation,
     } = req.body;
-    const picturePath = req?.file?.filename || "";
     const passwordHash = await bcrypt.hash(password, Number(process.env.SALT));
     const userDoc = await registerUser({
       firstName,
@@ -32,6 +32,7 @@ export const register = async (req, res) => {
     });
     return res.status(201).json(userDoc);
   } catch (error) {
+    console.log(error) 
     return res.status(500).json({ error: error.message });
   }
 };

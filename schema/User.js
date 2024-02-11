@@ -30,11 +30,8 @@ const UserSchema = new mongoose.Schema(
     },
     picturePath: {
       type: String,
+      required:true,
       dafault: "",
-    },
-    friends: {
-      type: Array,
-      default: [],
     },
     location: String,
     occupation: String,
