@@ -1,8 +1,7 @@
 import User from "../schema/User.js";
 
 export const registerUser = ({
-  firstName,
-  lastName,
+  name,
   email,
   username,
   password,
@@ -12,17 +11,16 @@ export const registerUser = ({
 }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const userWithEmail = await findUserWithEmail(email);
-      const userWithUsername = await findUserWithUsername(username);
-      if (userWithEmail) return reject({message:"Email is already registered"});
+      const userWithEmail = await findUserWithEmail({email});
+      const userWithUsername = await findUserWithUsername({username});
+      if (userWithEmail) return reject({message:"Email is already registered"}); 
       if (userWithUsername) return reject({message:"Username is taken"});
       console.log(userWithEmail)
       console.log(userWithUsername)
       const user = new User({
-        firstName,
-        lastName,
+        name,  
         email,
-        username,
+        username, 
         password,
         picturePath,
         location,

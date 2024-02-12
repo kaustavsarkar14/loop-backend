@@ -1,8 +1,10 @@
-import express from "express"
-import { create, getAllPosts } from "../controllers/post.js"
-const postRouter = express.Router()
+import express from "express";
+import { create, getAllPosts, getAllPublicPosts } from "../controllers/post.js";
+import { isAuth } from "../middleware/auth.js";
+const postRouter = express.Router();
 
-postRouter.get('/get', getAllPosts)
-postRouter.post('/create', create)
+postRouter.get("/getall", getAllPublicPosts);
+postRouter.get("/get", isAuth, getAllPosts);
+postRouter.post("/create", isAuth, create);
 
-export default postRouter
+export default postRouter;

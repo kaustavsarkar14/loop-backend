@@ -10,19 +10,17 @@ import {
 export const register = async (req, res) => {
   try {
     const {
-      firstName,
-      lastName,
+      name,
       email,
       password,
-      username,
+      username, 
       location,
-      picturePath, 
+      picturePath,  
       occupation,
     } = req.body;
     const passwordHash = await bcrypt.hash(password, Number(process.env.SALT));
     const userDoc = await registerUser({
-      firstName,
-      lastName,
+      name,
       email,
       username,
       password: passwordHash,
@@ -30,7 +28,7 @@ export const register = async (req, res) => {
       location,
       occupation,
     });
-    return res.status(201).json(userDoc);
+    return res.status(201).json(userDoc); 
   } catch (error) {
     console.log(error) 
     return res.status(500).json({ error: error.message });

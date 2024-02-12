@@ -45,14 +45,14 @@ const upload = multer({ storage });
 // ROUTES WITH FILES
 app.post("/uploadfile", upload.single("picture"), (req, res) => {
   const filename = req.file.filename;
-  return res.status(201).json({ filename });
+  return res.status(201).json({ filename }); 
 });
 
 // ROUTES
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/follow", isAuth, followRouter);
-app.use("/post", isAuth, postRouter);
+app.use("/post", postRouter);
 
 // MONGOOSE SETUP
 const PORT = process.env.PORT || 8001;

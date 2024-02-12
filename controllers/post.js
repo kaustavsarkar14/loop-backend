@@ -1,4 +1,4 @@
-import { createPost, getPosts } from "../models/Post.js";
+import { createPost, getPosts, getPublicPosts } from "../models/Post.js";
 
 export const create = async (req, res) => {
   try {
@@ -10,10 +10,18 @@ export const create = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-
-export const getAllPosts = async (req, res) => {
+ 
+export const getAllPosts = async (req, res) => { 
   try {
     const posts = await getPosts();
+    return res.status(200).json(posts);
+  } catch (error) {
+    return res.send(500).json({ error: error.message });
+  }
+};
+export const getAllPublicPosts = async (req, res) => { 
+  try {
+    const posts = await getPublicPosts();
     return res.status(200).json(posts);
   } catch (error) {
     return res.send(500).json({ error: error.message });

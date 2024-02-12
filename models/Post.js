@@ -21,9 +21,19 @@ export const createPost = ({ title, image, userId }) => {
 export const getPosts = ()=>{
     return new Promise(async(resolve, reject)=>{
         try {
-            const posts = await Post.find({})
+            const posts = await Post.find({}).sort({creationDateAndTime:-1}).populate("userId")
             resolve(posts)
-        } catch (error) {
+        } catch (error) { 
+            reject(error)
+        }
+    })
+}
+export const getPublicPosts = ()=>{
+    return new Promise(async(resolve, reject)=>{
+        try {
+            const posts = await Post.find({}).sort({creationDateAndTime:-1}).populate("userId")
+            resolve(posts)
+        } catch (error) { 
             reject(error)
         }
     })
