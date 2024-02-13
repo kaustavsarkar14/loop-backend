@@ -1,11 +1,11 @@
 import express from "express";
-import { create, getAllPosts, getAllPublicPosts, handlePostDelete } from "../controllers/post.js";
+import { handleCreatePost, handleGetAllPosts, handleGetAllPublicPosts, handlePostDelete } from "../controllers/post.js";
 import { isAuth } from "../middleware/auth.js";
 const postRouter = express.Router();
 
-postRouter.get("/getall", getAllPublicPosts);
-postRouter.get("/get", isAuth, getAllPosts);
-postRouter.post("/create", isAuth, create);
+postRouter.get("/getall", handleGetAllPublicPosts);
+postRouter.get("/get", isAuth, handleGetAllPosts);
+postRouter.post("/create", isAuth, handleCreatePost);
 postRouter.post("/delete", isAuth, handlePostDelete);
 
 export default postRouter;

@@ -1,6 +1,6 @@
 import { followUser, getFollowers, getFollowings } from "../models/Follow.js";
 
-export const follow = async (req, res) => {
+export const handleFollow = async (req, res) => {
   try {
     const followerUserId = req.user._id;
     const { followingUserId } = req.body;
@@ -10,7 +10,7 @@ export const follow = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-export const followings = async (req, res) => {
+export const handleGetFollowings = async (req, res) => {
   try {
     const followerUserId = req.user._id;
     const followings = await getFollowings(followerUserId);
@@ -20,7 +20,7 @@ export const followings = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-export const followers = async (req, res) => {
+export const handleGetFollowers = async (req, res) => {
   try {
     const followingUserId = req.user._id;
     const followers = await getFollowers(followingUserId);

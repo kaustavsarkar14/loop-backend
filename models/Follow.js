@@ -38,7 +38,7 @@ export const unFollowUser = ({ followerUserId, followingUserId }) => {
 export const getFollowers = (followingUserId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const followers = await Follow.find({ followingUserId });
+      const followers = await Follow.find({ followingUserId }).populate("followerUserId");
       resolve(followers);
     } catch (error) {
       reject(error);
@@ -50,6 +50,27 @@ export const getFollowings = (followerUserId) => {
     try {
       const followings = await Follow.find({ followerUserId }).populate("followingUserId");
       resolve(followings);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const getFollowerCount = (followingUserId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const followers = await Follow.find({ followingUserId }).countDocuments();
+      resolve(followers);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+export const getFollowingCount = (followerUserId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const followers = await Follow.find({ followerUserId }).countDocuments();
+      resolve(followers);
     } catch (error) {
       reject(error);
     }

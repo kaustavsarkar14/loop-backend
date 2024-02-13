@@ -1,6 +1,7 @@
+import { getFollowerCount, getFollowers, getFollowingCount, getFollowings } from "../models/Follow.js";
 import { findUserWithId } from "../models/User.js";
 
-export const getUser = async (req, res) => {
+export const handleGetUser = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await findUserWithId({ id });
@@ -9,4 +10,15 @@ export const getUser = async (req, res) => {
     return res.status(500).json({ error });
   }
 };
+
+export const handleGetUserStats = async(req, res)=>{
+  const {id} = req.params;
+  try {
+    const followers = await getFollowerCount(id)
+    const followings = await getFollowingCount(id)
+    res.send({followers, followings})
+  } catch (error) {
+    
+  }
+}
 

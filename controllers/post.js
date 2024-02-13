@@ -6,7 +6,7 @@ import {
   getPublicPosts,
 } from "../models/Post.js";
 
-export const create = async (req, res) => {
+export const handleCreatePost = async (req, res) => {
   try {
     const userId = req.user._id;
     const { title, image } = req.body;
@@ -17,7 +17,7 @@ export const create = async (req, res) => {
   }
 };
 
-export const getAllPosts = async (req, res) => {
+export const handleGetAllPosts = async (req, res) => {
   const page = req.query.page
   try {
     const posts = await getPosts({page});
@@ -26,7 +26,7 @@ export const getAllPosts = async (req, res) => {
     return res.send(500).json({ error: error.message });
   }
 };
-export const getAllPublicPosts = async (req, res) => {
+export const handleGetAllPublicPosts = async (req, res) => {
   const page = req.query.page
   try {
     const posts = await getPublicPosts({page});

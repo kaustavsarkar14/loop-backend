@@ -7,7 +7,7 @@ import {
 } from "../models/User.js";
 
 // REGISTER USER
-export const register = async (req, res) => {
+export const handleRegister = async (req, res) => {
   try {
     const {
       name,
@@ -36,7 +36,7 @@ export const register = async (req, res) => {
 };
 
 // LOG IN
-export const login = async (req, res) => {
+export const handleLogin = async (req, res) => {
   try {
     const { loginId, password } = req.body;
     let user;
