@@ -1,4 +1,10 @@
-import { createPost, getPosts, getPublicPosts } from "../models/Post.js";
+import {
+  createPost,
+  deletePost,
+  findPostById,
+  getPosts,
+  getPublicPosts,
+} from "../models/Post.js";
 
 export const create = async (req, res) => {
   try {
@@ -10,20 +16,36 @@ export const create = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
- 
-export const getAllPosts = async (req, res) => { 
+
+export const getAllPosts = async (req, res) => {
+  const page = req.query.page
   try {
-    const posts = await getPosts();
+    const posts = await getPosts({page});
     return res.status(200).json(posts);
   } catch (error) {
     return res.send(500).json({ error: error.message });
   }
 };
-export const getAllPublicPosts = async (req, res) => { 
+export const getAllPublicPosts = async (req, res) => {
+  const page = req.query.page
   try {
-    const posts = await getPublicPosts();
+    const posts = await getPublicPosts({page});
     return res.status(200).json(posts);
   } catch (error) {
     return res.send(500).json({ error: error.message });
+  }
+};
+export const handlePostDelete = async (req, res) => {
+  try {
+    const postId = req.body.postId;
+    const post = await findPostById({ postId });
+    if (!post) return res.status(400).json({ message: "No post found." });
+    if (!post.userId.equals(req.user._id))
+      return res.status(401).json({ message: "Unauthorized request" });
+    const deletedPost = await deletePost({ postId });
+    return res.status(200).json(deletedPost);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
   }
 };
