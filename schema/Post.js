@@ -24,6 +24,18 @@ const postSchema = new mongoose.Schema({
         type: Boolean,
         required : true,
         default : false
+    },
+    isRepost: {
+        type: Boolean,
+        default: false
+    },
+    reposterId: {
+        type : mongoose.Schema.Types.ObjectId,        
+        ref: 'user' 
+    },
+    originalPostId : {
+        type : mongoose.Schema.Types.ObjectId,        
+        ref: 'post' 
     }
 })
 

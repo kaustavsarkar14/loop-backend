@@ -1,6 +1,6 @@
 import Post from "../schema/Post.js";
 
-export const createPost = ({ title, image, userId }) => {
+export const createPost = ({ title, image, userId, isRepost, reposterId,originalPostId }) => {
   return new Promise(async (resolve, reject) => {
     try {
       const postObj = new Post({
@@ -9,6 +9,8 @@ export const createPost = ({ title, image, userId }) => {
         userId,
         creationDateAndTime: Date.now(),
         isDeleted: false,
+        isRepost,
+        reposterId,originalPostId
       });
       const postDoc = await postObj.save();
       resolve(postDoc);
@@ -18,40 +20,40 @@ export const createPost = ({ title, image, userId }) => {
   });
 };
 
-export const getPosts = ({page}) => {
+export const getPosts = ({ page }) => {
   return new Promise(async (resolve, reject) => {
     try {
       const posts = await Post.find({})
         .sort({ creationDateAndTime: -1 })
-        .skip((page-1)*10)
+        .skip((page - 1) * 10)
         .limit(10)
-        .populate("userId");
+        .populate("userId").populate("reposterId");
       resolve(posts);
     } catch (error) {
       reject(error);
     }
   });
 };
-export const getPublicPosts = ({page}) => {
+export const getPublicPosts = ({ page }) => {
   return new Promise(async (resolve, reject) => {
     try {
-        const posts = await Post.find({})
+      const posts = await Post.find({})
         .sort({ creationDateAndTime: -1 })
-        .skip((page-1)*10)
+        .skip((page - 1) * 10)
         .limit(10)
-        .populate("userId");
+        .populate("userId").populate("reposterId");
       resolve(posts);
     } catch (error) {
       reject(error);
     }
   });
 };
-export const getUserPosts = ({page, id}) => {
+export const getUserPosts = ({ page, id }) => {
   return new Promise(async (resolve, reject) => {
     try {
-        const posts = await Post.find({userId:id})
+      const posts = await Post.find({ userId: id })
         .sort({ creationDateAndTime: -1 })
-        .skip((page-1)*10)
+        .skip((page - 1) * 10)
         .limit(10)
         .populate("userId");
       resolve(posts);
@@ -80,3 +82,14 @@ export const findPostById = ({ postId }) => {
     }
   });
 };
+
+export const getReposts = ({postId})=>{
+  return new Promise(async(resolve, reject)=>{
+    try {
+      const reposts = await Post.find({originalPostId:postId})
+      resolve(reposts)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
