@@ -4,6 +4,7 @@ import {
   findPostById,
   getPosts,
   getPublicPosts,
+  getUserPosts,
 } from "../models/Post.js";
 
 export const handleCreatePost = async (req, res) => {
@@ -30,6 +31,16 @@ export const handleGetAllPublicPosts = async (req, res) => {
   const page = req.query.page
   try {
     const posts = await getPublicPosts({page});
+    return res.status(200).json(posts);
+  } catch (error) {
+    return res.send(500).json({ error: error.message });
+  }
+};
+export const handleGetUserPosts = async (req, res) => {
+  const {id} = req.params
+  const page = req.query.page
+  try {
+    const posts = await getUserPosts({page, id});
     return res.status(200).json(posts);
   } catch (error) {
     return res.send(500).json({ error: error.message });

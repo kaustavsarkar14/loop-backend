@@ -76,3 +76,14 @@ export const getFollowingCount = (followerUserId) => {
     }
   });
 };
+
+export const getFollowDoc = ({followingUserId, followerUserId})=>{
+  return new Promise(async(resolve, reject)=>{
+    try {
+      const followDoc = await Follow.findOne({followingUserId, followerUserId})
+      resolve(followDoc)
+    } catch (error) {
+      reject(error)
+    }
+  })
+}

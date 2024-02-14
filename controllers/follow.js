@@ -1,10 +1,20 @@
-import { followUser, getFollowers, getFollowings } from "../models/Follow.js";
+import { followUser, getFollowers, getFollowings, unFollowUser } from "../models/Follow.js";
 
 export const handleFollow = async (req, res) => {
   try {
     const followerUserId = req.user._id;
     const { followingUserId } = req.body;
     const followObj = await followUser({ followerUserId, followingUserId });
+    return res.status(201).json({ followObj });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+export const handleUnFollow = async (req, res) => {
+  try {
+    const followerUserId = req.user._id;
+    const { followingUserId } = req.body;
+    const followObj = await unFollowUser({ followerUserId, followingUserId });
     return res.status(201).json({ followObj });
   } catch (error) {
     return res.status(500).json({ error: error.message });

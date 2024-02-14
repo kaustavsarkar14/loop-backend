@@ -1,4 +1,10 @@
-import { getFollowerCount, getFollowers, getFollowingCount, getFollowings } from "../models/Follow.js";
+import {
+  getFollowDoc,
+  getFollowerCount,
+  getFollowers,
+  getFollowingCount,
+  getFollowings,
+} from "../models/Follow.js";
 import { findUserWithId } from "../models/User.js";
 
 export const handleGetUser = async (req, res) => {
@@ -11,14 +17,27 @@ export const handleGetUser = async (req, res) => {
   }
 };
 
-export const handleGetUserStats = async(req, res)=>{
-  const {id} = req.params;
+export const handleGetUserStats = async (req, res) => {
+  const { id } = req.params;
   try {
-    const followers = await getFollowerCount(id)
-    const followings = await getFollowingCount(id)
-    res.send({followers, followings})
+    const followers = await getFollowerCount(id);
+    const followings = await getFollowingCount(id);
+    res.send({ followers, followings });
+  } catch (error) {}
+};
+export const handleGetFollowDetails = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const isFollowing = await getFollowDoc({
+      followerUserId: id,
+      followingUserId: req.user._id,
+    });
+    const isFollower = await getFollowDoc({
+      followingUserId: id,
+      followerUserId: req.user._id,
+    });
+    return res.status(200).json({ isFollowing, isFollower });
   } catch (error) {
-    
+    return res.status(500).json({ error: error.message });
   }
-}
-
+};

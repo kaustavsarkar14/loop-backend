@@ -46,6 +46,20 @@ export const getPublicPosts = ({page}) => {
     }
   });
 };
+export const getUserPosts = ({page, id}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+        const posts = await Post.find({userId:id})
+        .sort({ creationDateAndTime: -1 })
+        .skip((page-1)*10)
+        .limit(10)
+        .populate("userId");
+      resolve(posts);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 export const deletePost = ({ postId }) => {
   return new Promise(async (resolve, reject) => {
     try {
