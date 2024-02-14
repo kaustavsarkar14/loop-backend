@@ -13,6 +13,7 @@ import userRouter from "./routes/user.js";
 import followRouter from "./routes/follow.js";
 import { isAuth } from "./middleware/auth.js";
 import postRouter from "./routes/post.js";
+import likeRouter from "./routes/like.js";
 
 // CONFIGURATION
 const __filename = fileURLToPath(import.meta.url);
@@ -52,6 +53,7 @@ app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/follow", isAuth, followRouter);
 app.use("/post", postRouter);
+app.use("/like", likeRouter);
 
 // MONGOOSE SETUP
 const PORT = process.env.PORT || 8001;
