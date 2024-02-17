@@ -26,16 +26,16 @@ const UserSchema = new mongoose.Schema(
       type: String,
       dafault: "",
     },
+    bannerPath: {
+      type: String,
+      default: "",
+    },
+    bio: {
+      type: String,
+      default: "",
+    },
     location: String,
     occupation: String,
-    viewedProfile: {
-      type: Number,
-      default: 0,
-    },
-    impressions: {
-      type: Number,
-      default: 0,
-    },
   },
   { timestamps: true }
 );

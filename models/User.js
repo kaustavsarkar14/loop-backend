@@ -11,16 +11,17 @@ export const registerUser = ({
 }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const userWithEmail = await findUserWithEmail({email});
-      const userWithUsername = await findUserWithUsername({username});
-      if (userWithEmail) return reject({message:"Email is already registered"}); 
-      if (userWithUsername) return reject({message:"Username is taken"});
-      console.log(userWithEmail)
-      console.log(userWithUsername)
+      const userWithEmail = await findUserWithEmail({ email });
+      const userWithUsername = await findUserWithUsername({ username });
+      if (userWithEmail)
+        return reject({ message: "Email is already registered" });
+      if (userWithUsername) return reject({ message: "Username is taken" });
+      console.log(userWithEmail);
+      console.log(userWithUsername);
       const user = new User({
-        name,  
+        name,
         email,
-        username, 
+        username,
         password,
         picturePath,
         location,
@@ -33,7 +34,7 @@ export const registerUser = ({
     }
   });
 };
-export const findUserWithEmail = ({email}) => {
+export const findUserWithEmail = ({ email }) => {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await User.findOne({ email });
@@ -43,7 +44,7 @@ export const findUserWithEmail = ({email}) => {
     }
   });
 };
-export const findUserWithUsername = ({username}) => {
+export const findUserWithUsername = ({ username }) => {
   return new Promise(async (resolve, reject) => {
     try {
       const user = await User.findOne({ username });
@@ -53,14 +54,63 @@ export const findUserWithUsername = ({username}) => {
     }
   });
 };
-export const findUserWithId = ({id}) => {
+export const findUserWithId = ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(id)
-      const user = await User.findOne({_id:id})
+      console.log(id);
+      const user = await User.findOne({ _id: id });
       resolve(user);
     } catch (error) {
       reject(error);
+    }
+  });
+};
+export const editProfile = ({
+  id,
+  newName,
+  newEmail,
+  newUsername,
+  newBio,
+  newLocation,
+  newPicturepath,
+  newBannerpath,
+  newOccupation
+}) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const updateUser = await User.findById(id);
+
+      if (!updateUser) {
+        throw new Error("User not found");
+      }
+
+      if (newEmail && newEmail !== updateUser.email) {
+        const emailExists = await User.findOne({ email: newEmail });
+        if (emailExists) {
+          throw new Error("Email already exists");
+        }
+        updateUser.email = newEmail;
+      }
+
+      if (newUsername && newUsername !== updateUser.username) {
+        const usernameExists = await User.findOne({ username: newUsername });
+        if (usernameExists) {
+          throw new Error("Username already exists");
+        }
+        updateUser.username = newUsername;
+      }
+
+      if (newName) updateUser.name = newName;
+      if (newBio) updateUser.bio = newBio;
+      if (newLocation) updateUser.location = newLocation;
+      if (newPicturepath) updateUser.picturePath = newPicturepath;
+      if (newBannerpath) updateUser.bannerPath = newBannerpath;
+      if(newOccupation) updateUser.occupation = newOccupation
+
+      const user = await updateUser.save();
+      resolve(user);
+    } catch (err) {
+      reject(err);
     }
   });
 };

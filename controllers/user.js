@@ -5,7 +5,7 @@ import {
   getFollowingCount,
   getFollowings,
 } from "../models/Follow.js";
-import { findUserWithId } from "../models/User.js";
+import { editProfile, findUserWithId } from "../models/User.js";
 
 export const handleGetUser = async (req, res) => {
   const { id } = req.params;
@@ -37,6 +37,35 @@ export const handleGetFollowDetails = async (req, res) => {
       followerUserId: req.user._id,
     });
     return res.status(200).json({ isFollowing, isFollower });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+export const handleEditeProfile = async (req, res) => {
+  try {
+    const {
+      newName,
+      newEmail,
+      newUsername,
+      newBio,
+      newLocation,
+      newPicturepath,
+      newBannerpath,
+      newOccupation
+    } = req.body;
+    const id = req.user._id
+    const updatedUser = await editProfile({
+      id,
+      newName,
+      newEmail,
+      newUsername,
+      newBio,
+      newLocation,
+      newPicturepath,
+      newBannerpath,
+      newOccupation
+    });
+    return res.status(200).json(updatedUser);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

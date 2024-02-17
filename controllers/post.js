@@ -13,14 +13,24 @@ export const handleCreatePost = async (req, res) => {
   try {
     const userId = req.user._id;
     const { title, image, isRepost, reposterId, originalPostId } = req.body;
-    const postDoc = await createPost({
-      userId,
-      title,
-      image,
-      isRepost,
-      reposterId,
-      originalPostId,
-    });
+    let  postDoc  
+    if(!isRepost){
+      postDoc = await createPost({
+        userId,
+        title,
+        image,
+      });
+    }
+    else {
+      postDoc = await createPost({
+        userId:req.body.userId,
+        isRepost,
+        reposterId,
+        originalPostId,
+        title,
+        image
+      })
+    }
     return res.status(201).json(postDoc);
   } catch (error) {
     return res.status(500).json({ error: error.message });
