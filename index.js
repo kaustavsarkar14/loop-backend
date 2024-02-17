@@ -14,6 +14,7 @@ import followRouter from "./routes/follow.js";
 import { isAuth } from "./middleware/auth.js";
 import postRouter from "./routes/post.js";
 import likeRouter from "./routes/like.js";
+import commentRouter from "./routes/comment.js";
 
 // CONFIGURATION
 const __filename = fileURLToPath(import.meta.url);
@@ -54,6 +55,7 @@ app.use("/user", userRouter);
 app.use("/follow", isAuth, followRouter);
 app.use("/post", postRouter);
 app.use("/like", likeRouter);
+app.use("/comment", commentRouter)
 
 // MONGOOSE SETUP
 const PORT = process.env.PORT || 8001;
