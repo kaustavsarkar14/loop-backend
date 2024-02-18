@@ -16,8 +16,7 @@ export const registerUser = ({
       if (userWithEmail)
         return reject({ message: "Email is already registered" });
       if (userWithUsername) return reject({ message: "Username is taken" });
-      console.log(userWithEmail);
-      console.log(userWithUsername);
+     
       const user = new User({
         name,
         email,
@@ -57,7 +56,6 @@ export const findUserWithUsername = ({ username }) => {
 export const findUserWithId = ({ id }) => {
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(id);
       const user = await User.findOne({ _id: id });
       resolve(user);
     } catch (error) {
@@ -111,6 +109,19 @@ export const editProfile = ({
       resolve(user);
     } catch (err) {
       reject(err);
+    }
+  });
+};
+export const searchUsers = ({ query }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const users = await User.find({
+        name: { $regex: query, $options: "i" },
+      });
+      resolve(users);
+    } catch (error) {
+      console.log(error)
+      reject(error);
     }
   });
 };

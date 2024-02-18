@@ -5,7 +5,7 @@ import {
   getFollowingCount,
   getFollowings,
 } from "../models/Follow.js";
-import { editProfile, findUserWithId } from "../models/User.js";
+import { editProfile, findUserWithId, searchUsers } from "../models/User.js";
 
 export const handleGetUser = async (req, res) => {
   const { id } = req.params;
@@ -16,7 +16,6 @@ export const handleGetUser = async (req, res) => {
     return res.status(500).json({ error });
   }
 };
-
 export const handleGetUserStats = async (req, res) => {
   const { id } = req.params;
   try {
@@ -70,3 +69,13 @@ export const handleEditeProfile = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+export const handleSearchUsers = async (req, res)=>{
+  const searchQuery = req.body.search
+  try {
+    const users = await searchUsers({query:searchQuery})
+    return res.status(200).json(users)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({error:error.message})
+  }
+}
