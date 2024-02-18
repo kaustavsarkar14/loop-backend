@@ -14,6 +14,9 @@ const commentSchema = new mongoose.Schema({
         ref: "user",
         required : true
     },
+    creationDateAndTime : {
+        type: Date,
+    }
 })
 
 export default mongoose.model('comment', commentSchema)

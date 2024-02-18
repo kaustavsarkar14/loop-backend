@@ -1,3 +1,4 @@
+import { getFollowings } from "../models/Follow.js";
 import {
   createPost,
   deletePost,
@@ -39,11 +40,15 @@ export const handleCreatePost = async (req, res) => {
 
 export const handleGetAllPosts = async (req, res) => {
   const page = req.query.page;
+  const userId = req.user._id
   try {
-    const posts = await getPosts({ page });
+    const followingUserIds = (await getFollowings(userId)).map(followDb=>followDb.followingUserId._id)
+    const posts = await getPosts({ page, userId,followingUserIds });
+    // console.log(posts)
     return res.status(200).json(posts);
   } catch (error) {
-    return res.send(500).json({ error: error.message });
+    console.log(error)
+    return res.status(500).json({ error: error.message });
   }
 };
 export const handleGetAllPublicPosts = async (req, res) => {
