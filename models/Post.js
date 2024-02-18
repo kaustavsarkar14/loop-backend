@@ -30,66 +30,38 @@ export const createPost = ({
 
 export const getPosts = ({ page, userId, followingUserIds }) => {
   return new Promise(async (resolve, reject) => {
-      try {
-          let posts = [];
-
-          const followingUsersPosts = await Post.aggregate([
-              {
-                  $match: {
-                      $or: [
-                          { userId: { $in: followingUserIds } },
-                          { reposterId: { $in: followingUserIds } }
-                      ]
-                  },
-              },
-              {
-                  $sort: { creationDateAndTime: -1 },
-              },
-              {
-                  $facet: {
-                      data: [{ $skip: (page - 1) * 10 }, { $limit: 10 }],
-                  },
-              },
-          ]);
-
-          const followingPostsData = followingUsersPosts[0].data;
-          await Post.populate(followingPostsData, [{ path: 'userId' }, { path: 'reposterId' }]);
-
-          if (followingPostsData.length === 10) return resolve(followingPostsData);
-
-          const nonFollowingUsersPosts = await Post.aggregate([
-              {
-                  $match: {
-                      $and: [
-                          { userId: { $nin: followingUserIds } },
-                          { reposterId: { $nin: followingUserIds } }
-                      ]
-                  },
-              },
-              {
-                  $sort: { creationDateAndTime: -1 },
-              },
-              {
-                  $facet: {
-                      data: [
-                          { $skip: (page - 1) * 10 },
-                          { $limit: 10 - followingPostsData.length },
-                      ],
-                  },
-              },
-          ]);
-
-          const nonFollowingPostsData = nonFollowingUsersPosts[0].data;
-          await Post.populate(nonFollowingPostsData, [{ path: 'userId' }, { path: 'reposterId' }]);
-
-          posts = [...followingPostsData, ...nonFollowingPostsData];
-          resolve(posts);
-      } catch (error) {
-          reject(error);
-      }
+    try {
+      const posts = await Post.aggregate([
+        {
+          $addFields: {
+            isFollowingPost: {
+              $or: [
+                { $in: ["$userId", followingUserIds] },
+                { $in: ["$reposterId", followingUserIds] }
+              ]
+            }
+          }
+        },
+        {
+          $sort: {
+            isFollowingPost: -1,
+            
+          }
+        },
+        {
+          $skip: (page - 1) * 10
+        },
+        {
+          $limit: 10
+        }
+      ]);
+      await Post.populate(posts, [{ path: 'userId' }, { path: 'reposterId' }]);
+      resolve(posts);
+    } catch (error) {
+      reject(error);
+    }
   });
 };
-
 
 export const getPublicPosts = ({ page }) => {
   return new Promise(async (resolve, reject) => {
