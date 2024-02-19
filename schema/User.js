@@ -38,6 +38,10 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     location: String,
     occupation: String,
   },

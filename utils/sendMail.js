@@ -67,7 +67,7 @@ export const sendMail = ({email, verifyToken})=>{
               <div class="message">
                   Please click the button below to verify your email address and complete your registration.
               </div>
-              <a href="http://localhost:8000/verify/${verifyToken}" class="verify-button">Verify Email</a>
+              <a href="http://localhost:8000/auth/verify/${verifyToken}" class="verify-button">Verify Email</a>
               <div class="footer">
                   If you did not request this email, you can safely ignore it.
               </div>
@@ -75,7 +75,7 @@ export const sendMail = ({email, verifyToken})=>{
       </body>
       </html>`
     };
-    
+     
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);
