@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { CLIENT_BASE_URL } from "./CONSTANTS.js";
+import { CLIENT_BASE_URL, SERVER_BASE_URL } from "./CONSTANTS.js";
 
 export const sendMail = ({email, verifyToken})=>{
     var transporter = nodemailer.createTransport({
@@ -68,7 +68,7 @@ export const sendMail = ({email, verifyToken})=>{
               <div class="message">
                   Please click the button below to verify your email address and complete your registration.
               </div>
-              <a href="${CLIENT_BASE_URL}/auth/verify/${verifyToken}" class="verify-button">Verify Email</a>
+              <a href="${SERVER_BASE_URL}/auth/verify/${verifyToken}" class="verify-button">Verify Email</a>
               <div class="footer">
                   If you did not request this email, you can safely ignore it.
               </div>
