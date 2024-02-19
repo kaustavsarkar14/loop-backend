@@ -4,6 +4,7 @@ import {
   findUserWithEmail,
   findUserWithUsername,
   registerUser,
+  verifyEmail,
 } from "../models/User.js";
 
 // REGISTER USER
@@ -52,3 +53,14 @@ export const handleLogin = async (req, res) => {
     return res.status(500).json({ error });
   }
 };
+
+export const handleVerifyEmail = async (req, res) => {
+  try {
+    const user = await verifyEmail(req.params.token);
+    const htmlResponse = "<h1>Email Verified</h1>";
+    res.send(htmlResponse);
+  }
+  catch (error) {
+    
+  }
+}

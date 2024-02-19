@@ -1,5 +1,5 @@
 import User from "../schema/User.js";
-
+import jwt from "jsonwebtoken";
 export const registerUser = ({
   name,
   email,
@@ -16,7 +16,7 @@ export const registerUser = ({
       if (userWithEmail)
         return reject({ message: "Email is already registered" });
       if (userWithUsername) return reject({ message: "Username is taken" });
-     
+
       const user = new User({
         name,
         email,
@@ -72,7 +72,7 @@ export const editProfile = ({
   newLocation,
   newPicturepath,
   newBannerpath,
-  newOccupation
+  newOccupation,
 }) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -103,7 +103,7 @@ export const editProfile = ({
       if (newLocation) updateUser.location = newLocation;
       if (newPicturepath) updateUser.picturePath = newPicturepath;
       if (newBannerpath) updateUser.bannerPath = newBannerpath;
-      if(newOccupation) updateUser.occupation = newOccupation
+      if (newOccupation) updateUser.occupation = newOccupation;
 
       const user = await updateUser.save();
       resolve(user);
@@ -120,7 +120,32 @@ export const searchUsers = ({ query }) => {
       });
       resolve(users);
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      reject(error);
+    }
+  });
+};
+export const getNewUsers = (count) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const users = await User.find()
+        .sort({
+          createdAt: -1,
+        })
+        .limit(count);
+      resolve(users);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+export const verifyEmail = (token) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const {id} = jwt.verify(token, process.env.SECRET_KEY);
+      const user = await User.findOneAndUpdate({_id:id}, {isEmailVerified: true});
+      resolve(user)
+    } catch (error) {
       reject(error);
     }
   });
