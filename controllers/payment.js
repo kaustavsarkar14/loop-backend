@@ -1,6 +1,7 @@
 import { instance } from "../index.js";
 import crypto from "crypto";
 import { verifyUser } from "../models/User.js";
+import { CLIENT_BASE_URL } from "../utils/CONSTANTS.js";
 
 export const checkout = async (req, res) => {
   const options = {
@@ -21,7 +22,7 @@ export const paymentVerification = async (req, res) => {
     .digest("hex");
   if (expected === razorpay_signature) {
     const updatedUser = await verifyUser(req.params.id);
-    return res.redirect(`http://localhost:3000/paymentsuccess`);
+    return res.redirect(CLIENT_BASE_URL+"/paymentsuccess");
   }
   return res.status(400).json({ success: "false", message: "payment failed" });
 };
