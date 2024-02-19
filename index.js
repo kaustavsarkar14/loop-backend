@@ -15,12 +15,20 @@ import { isAuth } from "./middleware/auth.js";
 import postRouter from "./routes/post.js";
 import likeRouter from "./routes/like.js";
 import commentRouter from "./routes/comment.js";
+import Razorpay from "razorpay";
+import paymentRouter from "./routes/payment.js";
 
 // CONFIGURATION
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
 const app = express();
+
+// RAZORPAY CONFIG
+export const instance = new Razorpay({
+  key_id: process.env.RAZORPAY_API_KEY,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
 
 // MIDDLEWARES
 app.use(express.json());
@@ -56,6 +64,8 @@ app.use("/follow", isAuth, followRouter);
 app.use("/post", postRouter);
 app.use("/like", likeRouter);
 app.use("/comment", commentRouter)
+app.use('/payment', paymentRouter)
+app.get('/key', (req, res)=>res.status(200).json({key:process.env.RAZORPAY_API_KEY}))
 
 // MONGOOSE SETUP
 const PORT = process.env.PORT || 8001;

@@ -23,6 +23,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
     "multer-gridfs-storage": "^5.0.2",
-    "nodemailer": "^6.9.9"
+    "nodemailer": "^6.9.9",
+    "razorpay": "^2.9.2"
   }
 }

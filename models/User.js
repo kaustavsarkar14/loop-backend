@@ -150,3 +150,14 @@ export const verifyEmail = (token) => {
     }
   });
 };
+export const verifyUser = (id)=>{
+  return new Promise(async (resolve, reject) => {
+    try{
+      const user = await User.findOneAndUpdate({_id:id}, {isVerified: true});
+      resolve(user)
+    }
+    catch(error){
+     reject(error) 
+    }
+  })
+}
