@@ -1,1 +1,1 @@
-export const CLIENT_BASE_URL = "https://loop-frontend-nine.vercel.app/" 
+export const CLIENT_BASE_URL = "https://loop-frontend-nine.vercel.app" 
