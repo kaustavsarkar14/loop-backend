@@ -142,6 +142,8 @@ export const getNewUsers = (count) => {
 export const verifyEmail = (token) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log("id",id )
+      console.log("secret", process.env.SECRET_KEY)
       const {id} = jwt.verify(token, process.env.SECRET_KEY);
       const user = await User.findOneAndUpdate({_id:id}, {isEmailVerified: true});
       resolve(user)

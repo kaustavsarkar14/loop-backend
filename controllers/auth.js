@@ -55,7 +55,7 @@ export const handleLogin = async (req, res) => {
 };
 
 export const handleVerifyEmail = async (req, res) => {
-  try {
+  try { 
     const user = await verifyEmail(req.params.token);
     const htmlResponse = "<h1>Email Verified</h1>";
     res.send(htmlResponse);
