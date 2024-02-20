@@ -45,7 +45,7 @@ export const getPosts = ({ page, userId, followingUserIds }) => {
         {
           $sort: {
             isFollowingPost: -1,
-            
+            creationDateAndTime: -1
           }
         },
         {
