@@ -143,6 +143,7 @@ export const verifyEmail = (token) => {
   return new Promise(async (resolve, reject) => {
     try {
       console.log("secret", process.env.SECRET_KEY)
+      console.log("token", token)
       const {id} = jwt.verify(token, process.env.SECRET_KEY);
       console.log("id",id )
       const user = await User.findOneAndUpdate({_id:id}, {isEmailVerified: true});
