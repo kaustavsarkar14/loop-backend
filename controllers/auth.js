@@ -61,6 +61,8 @@ export const handleVerifyEmail = async (req, res) => {
     res.send(htmlResponse);
   }
   catch (error) {
-    
+    console.log(error)
+    const htmlResponse = "<h1>Error</h1>";
+    res.send(htmlResponse)
   }
 }
