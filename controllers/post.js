@@ -2,6 +2,7 @@ import { getFollowings } from "../models/Follow.js";
 import {
   createPost,
   deletePost,
+  editPost,
   findPostById,
   getPostById,
   getPosts,
@@ -120,3 +121,18 @@ export const handleGetPostById = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const handleEditPost = async (req, res) => {
+  try {
+    const postId = req.body.postId;
+    const post = await findPostById({ postId });
+    if (!post) return res.status(400).json({ message: "No post found." });
+    // if (!post.userId.equals(req.user._id))
+    //   return res.status(401).json({ message: "Unauthorized request" });
+    const updatedPost = await editPost({ postId, data: req.body.data });
+    return res.status(200).json(updatedPost);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+}

@@ -134,3 +134,15 @@ export const getReposts = ({ postId }) => {
     }
   })
  }
+
+export const editPost = ({postId, data})=>{
+  return new Promise(async(resolve, reject)=>{
+    try {
+      const updatedPost = await Post.findOneAndUpdate({_id:postId}, { $set: { ...data } });
+      resolve(updatedPost)
+    }
+    catch (error) {
+      reject(error);
+    }
+  })
+}
