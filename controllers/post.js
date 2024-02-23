@@ -3,6 +3,7 @@ import {
   createPost,
   deletePost,
   findPostById,
+  getPostById,
   getPosts,
   getPublicPosts,
   getReposts,
@@ -14,23 +15,22 @@ export const handleCreatePost = async (req, res) => {
   try {
     const userId = req.user._id;
     const { title, image, isRepost, reposterId, originalPostId } = req.body;
-    let  postDoc  
-    if(!isRepost){
+    let postDoc;
+    if (!isRepost) {
       postDoc = await createPost({
         userId,
         title,
         image,
       });
-    }
-    else {
+    } else {
       postDoc = await createPost({
-        userId:req.body.userId,
+        userId: req.body.userId,
         isRepost,
         reposterId,
         originalPostId,
         title,
-        image
-      })
+        image,
+      });
     }
     return res.status(201).json(postDoc);
   } catch (error) {
@@ -40,15 +40,17 @@ export const handleCreatePost = async (req, res) => {
 
 export const handleGetAllPosts = async (req, res) => {
   const page = req.query.page;
-  const userId = req.user._id
+  const userId = req.user._id;
   try {
-    const followingUserIds = (await getFollowings(userId)).map(followDb=>followDb.followingUserId._id)
-    const posts = await getPosts({ page, userId,followingUserIds });
+    const followingUserIds = (await getFollowings(userId)).map(
+      (followDb) => followDb.followingUserId._id
+    );
+    const posts = await getPosts({ page, userId, followingUserIds });
     // console.log(posts)
     return res.status(200).json(posts);
   } catch (error) {
-    console.log(error)
-    return res.status(500).json({ error: error.message });
+    console.log(error);
+    return res.status(500).json({ error: error.message }); 
   }
 };
 export const handleGetAllPublicPosts = async (req, res) => {
@@ -101,12 +103,20 @@ export const handleUndoRepost = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-export const handleGetReposts = async(req, res)=>{
+export const handleGetReposts = async (req, res) => {
   try {
-    const reposts = await getReposts({postId:req.body.postId})
-    return res.status(200).json(reposts)
+    const reposts = await getReposts({ postId: req.body.postId });
+    return res.status(200).json(reposts);
   } catch (error) {
-    return res.status(500).json({error:error.message})
-    
+    return res.status(500).json({ error: error.message });
   }
-}
+};
+
+export const handleGetPostById = async (req, res) => {
+  try {
+    const post = await getPostById({ postId: req.params.id });
+    return res.status(200).json(post);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};

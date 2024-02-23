@@ -123,3 +123,14 @@ export const getReposts = ({ postId }) => {
     }
   });
 };
+ export const getPostById = ({postId})=>{
+  return new Promise(async(resolve, reject)=>{
+    try {
+       const post = await Post.findOne({_id:postId}).populate("userId").populate("reposterId");
+       resolve(post)
+    }
+    catch (error) {
+      reject(error);
+    }
+  })
+ }
