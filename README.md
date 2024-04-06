@@ -84,4 +84,7 @@ This project welcomes contributions and suggestions. Feel free to open an issue 
 
 #### If you have any questions or suggestions, please don't hesitate to reach out to me on [LinkedIn](https://www.linkedin.com/in/kaustav-sarkar//).
 
+# Updates
+- Added loading animation while writing with AI
+
 Happy coding! 🚀
